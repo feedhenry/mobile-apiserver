@@ -13,5 +13,7 @@
 # limitations under the License.
 
 FROM fedora
-ADD kube-sample-apiserver /
-ENTRYPOINT ["/kube-sample-apiserver"]
+ADD server /
+RUN mkdir -p apiserver.local.config && \
+chmod 775 apiserver.local.config
+ENTRYPOINT ["/server"]

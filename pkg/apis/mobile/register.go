@@ -46,6 +46,5 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&MobileApp{},
 		&MobileAppList{},
 	)
-	//metav1.AddToGroupVersion(scheme, SchemeGroupVersion)
 	return nil
 }

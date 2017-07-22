@@ -97,7 +97,6 @@ func (_ TestInput) OpenAPIDefinition() *openapi.OpenAPIDefinition {
 			},
 		},
 	}
-	schema.Extensions = spec.Extensions{"x-test": "test"}
 	return &openapi.OpenAPIDefinition{
 		Schema:       schema,
 		Dependencies: []string{},
@@ -384,11 +383,6 @@ func getTestInputDefinition() spec.Schema {
 						},
 					},
 				},
-			},
-		},
-		VendorExtensible: spec.VendorExtensible{
-			Extensions: spec.Extensions{
-				"x-test": "test",
 			},
 		},
 	}

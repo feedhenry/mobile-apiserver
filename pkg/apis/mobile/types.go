@@ -16,11 +16,7 @@ limitations under the License.
 
 package mobile
 
-import (
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-
-	kapi "k8s.io/client-go/pkg/api"
-)
+import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 // MobileAppList is a list of MobileApp objects.
 type MobileAppList struct {
@@ -38,49 +34,15 @@ type MobileApp struct {
 	metav1.TypeMeta
 	metav1.ObjectMeta
 
-	Spec   MobileAppSpec
-	Status MobileAppStatus
+	Spec MobileAppSpec
 }
 
 // MobileAppSpec defines the requested MobileApp
 type MobileAppSpec struct {
-	Credential string
+	ClientType string
 }
-
-// MobileAppStatus defines the current state of the MobileApp
-type MobileAppStatus struct {
-	Conditions []MobileAppCondition
-}
-
-// MobileAppCondition contains condition information for a
-// MobileApp.
-type MobileAppCondition struct {
-	// Type of the condition, currently Ready or InstantiateFailure.
-	Type MobileAppConditionType
-	// Status of the condition, one of True, False or Unknown.
-	Status kapi.ConditionStatus
-	// LastTransitionTime is the last time a condition status transitioned from
-	// one state to another.
-	LastTransitionTime metav1.Time
-	// Reason is a brief machine readable explanation for the condition's last
-	// transition.
-	Reason string
-	// Message is a human readable description of the details of the last
-	// transition, complementing reason.
-	Message string
-}
-
-// MobileAppConditionType is the type of condition pertaining to a
-// MobileApp.
-type MobileAppConditionType string
 
 const (
-	// MobileAppReady indicates the service instance is Ready for use
-	// (provision was successful)
-	MobileAppReady MobileAppConditionType = "Ready"
-
-	// MobileAppInstantiateFailed indicates the provision request failed.
-	MobileAppFailed MobileAppConditionType = "Failure"
 
 	// TypePackage is the name of the package that defines the resource types
 	// used by this broker.
@@ -88,19 +50,19 @@ const (
 
 	// GroupName is the name of the api group used for resources created/managed
 	// by this broker.
-	GroupName = "sdkbroker.broker.k8s.io"
+	GroupName = "mobile.k8s.io"
 
 	// MobileAppsResource is the name of the resource used to represent
 	// provision requests(possibly fulfilled) for service instances
-	MobileAppsResource = "MobileApps"
+	MobileAppsResource = "mobileapps"
 
 	// MobileAppResource is the name of the resource used to represent
 	// provision requests(possibly fulfilled) for service instances
-	MobileAppResource = "MobileApp"
+	MobileAppResource = "mobileapp"
 
-	// BrokerAPIPrefix is the route prefix for the open service broker api
-	// endpoints (e.g. https://yourhost.com/broker/sdkbroker.broker.io/v2/catalog)
-	BrokerAPIPrefix = "/mobile/mobile.srv.io"
+	// MobileAPIPrefix is the route prefix for the open service broker api
+	// endpoints (e.g. https://yourhost.com/mobile/mobile.srv.io/v2/catalog)
+	MobileAPIPrefix = "/mobile/mobile.srv.io"
 
 	// Namespace is the namespace the broker will be deployed in and
 	// under which it will create any resources

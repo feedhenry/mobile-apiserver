@@ -17,7 +17,7 @@ limitations under the License.
 package clientset
 
 import (
-	sdkbrokerv1alpha1 "github.com/feedhenry/mobile-apiserver/pkg/client/clientset_generated/clientset/typed/sdkbroker/v1alpha1"
+	mobilev1alpha1 "github.com/feedhenry/mobile-apiserver/pkg/client/clientset_generated/clientset/typed/mobile/v1alpha1"
 	glog "github.com/golang/glog"
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
@@ -26,33 +26,33 @@ import (
 
 type Interface interface {
 	Discovery() discovery.DiscoveryInterface
-	SdkbrokerV1alpha1() sdkbrokerv1alpha1.SdkbrokerV1alpha1Interface
+	MobileV1alpha1() mobilev1alpha1.MobileV1alpha1Interface
 	// Deprecated: please explicitly pick a version if possible.
-	Sdkbroker() sdkbrokerv1alpha1.SdkbrokerV1alpha1Interface
+	Mobile() mobilev1alpha1.MobileV1alpha1Interface
 }
 
 // Clientset contains the clients for groups. Each group has exactly one
 // version included in a Clientset.
 type Clientset struct {
 	*discovery.DiscoveryClient
-	*sdkbrokerv1alpha1.SdkbrokerV1alpha1Client
+	*mobilev1alpha1.MobileV1alpha1Client
 }
 
-// SdkbrokerV1alpha1 retrieves the SdkbrokerV1alpha1Client
-func (c *Clientset) SdkbrokerV1alpha1() sdkbrokerv1alpha1.SdkbrokerV1alpha1Interface {
+// MobileV1alpha1 retrieves the MobileV1alpha1Client
+func (c *Clientset) MobileV1alpha1() mobilev1alpha1.MobileV1alpha1Interface {
 	if c == nil {
 		return nil
 	}
-	return c.SdkbrokerV1alpha1Client
+	return c.MobileV1alpha1Client
 }
 
-// Deprecated: Sdkbroker retrieves the default version of SdkbrokerClient.
+// Deprecated: Mobile retrieves the default version of MobileClient.
 // Please explicitly pick a version.
-func (c *Clientset) Sdkbroker() sdkbrokerv1alpha1.SdkbrokerV1alpha1Interface {
+func (c *Clientset) Mobile() mobilev1alpha1.MobileV1alpha1Interface {
 	if c == nil {
 		return nil
 	}
-	return c.SdkbrokerV1alpha1Client
+	return c.MobileV1alpha1Client
 }
 
 // Discovery retrieves the DiscoveryClient
@@ -71,7 +71,7 @@ func NewForConfig(c *rest.Config) (*Clientset, error) {
 	}
 	var cs Clientset
 	var err error
-	cs.SdkbrokerV1alpha1Client, err = sdkbrokerv1alpha1.NewForConfig(&configShallowCopy)
+	cs.MobileV1alpha1Client, err = mobilev1alpha1.NewForConfig(&configShallowCopy)
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +88,7 @@ func NewForConfig(c *rest.Config) (*Clientset, error) {
 // panics if there is an error in the config.
 func NewForConfigOrDie(c *rest.Config) *Clientset {
 	var cs Clientset
-	cs.SdkbrokerV1alpha1Client = sdkbrokerv1alpha1.NewForConfigOrDie(c)
+	cs.MobileV1alpha1Client = mobilev1alpha1.NewForConfigOrDie(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClientForConfigOrDie(c)
 	return &cs
@@ -97,7 +97,7 @@ func NewForConfigOrDie(c *rest.Config) *Clientset {
 // New creates a new Clientset for the given RESTClient.
 func New(c rest.Interface) *Clientset {
 	var cs Clientset
-	cs.SdkbrokerV1alpha1Client = sdkbrokerv1alpha1.New(c)
+	cs.MobileV1alpha1Client = mobilev1alpha1.New(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClient(c)
 	return &cs

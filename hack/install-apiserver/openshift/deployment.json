@@ -1,0 +1,88 @@
+{
+    "apiVersion": "apps/v1beta1",
+    "kind": "Deployment",
+    "metadata": {
+        "labels": {
+            "run": "mobile-apiserver",
+            "name": "mobile-apiserver",
+            "apiserver": "true",
+            "app": "api"
+        },
+        "name": "mobile-apiserver"
+    },
+    "spec": {
+        "replicas": 1,
+        "template": {
+            "metadata": {
+                "creationTimestamp": null,
+                "labels": {
+                    "run": "mobile-apiserver",
+                    "name": "mobile-apiserver",
+                    "apiserver": "true",
+                    "app": "api"
+                }
+            },
+            "spec": {
+                "serviceAccountName": "apiserver",
+                "containers": [{
+                        "ports": {
+                            "containerPort": 3101
+                        },
+                        "image": "feedhenry/mobile-apiserver:latest",
+                        "imagePullPolicy": "Always",
+                        "name": "mobile-apiserver",
+                        "resources": {},
+                        "terminationMessagePath": "/dev/termination-log",
+                        "args": [
+                            "--etcd-servers=http://localhost:2379",
+                            "--secure-port=3101",
+                            "--authentication-skip-lookup",
+                            "--client-ca-file=/mnt/apiserver-config/client-ca.crt",
+                            "--tls-cert-file=/mnt/apiserver-config/serving.crt",
+                            "--tls-private-key-file=/mnt/apiserver-config/serving.key",
+                            "--v=5"
+                        ],
+                        "volumeMounts": [{
+                            "name": "config-dir",
+                            "mountPath": "/mnt/apiserver-config"
+                        }]
+                    },
+                    {
+                        "name": "etcd",
+                        "env": [{
+                            "name": "ETCD_DATA_DIR",
+                            "value": "/etcd-data-dir"
+                        }],
+                        "command": [
+                            "/usr/local/bin/etcd",
+                            "--listen-client-urls",
+                            "http://0.0.0.0:2379",
+                            "--advertise-client-urls",
+                            "http://localhost:2379"
+                        ],
+                        "volumeMounts": [{
+                            "name": "etcd-data-dir",
+                            "mountPath": "/etcd-data-dir"
+                        }],
+                        "image": "quay.io/coreos/etcd:latest",
+                        "imagePullPolicy": "Always"
+                    }
+                ],
+                "volumes": [{
+                        "name": "etcd-data-dir",
+                        "emptyDir": {}
+                    },
+                    {
+                        "name": "config-dir",
+                        "hostPath": {
+                            "path": "/mnt/mobile-apiserver/config"
+                        }
+                    }
+                ],
+                "restartPolicy": "Always",
+                "securityContext": {},
+                "terminationGracePeriodSeconds": 30
+            }
+        }
+    }
+}

@@ -13,10 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
-// +k8s:deepcopy-gen=package,register
-// +k8s:conversion-gen=github.com/openshift/open-service-broker-sdk/pkg/apis/broker
-
 // Package v1alpha1 is the v1alpha1 version of the API.
-// +groupName=sdkbroker.broker.k8s.io
+// +k8s:deepcopy-gen=package,register
+// +k8s:conversion-gen=github.com/feedhenry/mobile-apiserver/pkg/apis/mobile
+// +groupName=mobile.k8s.io
 package v1alpha1

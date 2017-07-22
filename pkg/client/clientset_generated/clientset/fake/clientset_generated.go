@@ -18,8 +18,8 @@ package fake
 
 import (
 	clientset "github.com/feedhenry/mobile-apiserver/pkg/client/clientset_generated/clientset"
-	sdkbrokerv1alpha1 "github.com/feedhenry/mobile-apiserver/pkg/client/clientset_generated/clientset/typed/sdkbroker/v1alpha1"
-	fakesdkbrokerv1alpha1 "github.com/feedhenry/mobile-apiserver/pkg/client/clientset_generated/clientset/typed/sdkbroker/v1alpha1/fake"
+	mobilev1alpha1 "github.com/feedhenry/mobile-apiserver/pkg/client/clientset_generated/clientset/typed/mobile/v1alpha1"
+	fakemobilev1alpha1 "github.com/feedhenry/mobile-apiserver/pkg/client/clientset_generated/clientset/typed/mobile/v1alpha1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"
@@ -60,12 +60,12 @@ func (c *Clientset) Discovery() discovery.DiscoveryInterface {
 
 var _ clientset.Interface = &Clientset{}
 
-// SdkbrokerV1alpha1 retrieves the SdkbrokerV1alpha1Client
-func (c *Clientset) SdkbrokerV1alpha1() sdkbrokerv1alpha1.SdkbrokerV1alpha1Interface {
-	return &fakesdkbrokerv1alpha1.FakeSdkbrokerV1alpha1{Fake: &c.Fake}
+// MobileV1alpha1 retrieves the MobileV1alpha1Client
+func (c *Clientset) MobileV1alpha1() mobilev1alpha1.MobileV1alpha1Interface {
+	return &fakemobilev1alpha1.FakeMobileV1alpha1{Fake: &c.Fake}
 }
 
-// Sdkbroker retrieves the SdkbrokerV1alpha1Client
-func (c *Clientset) Sdkbroker() sdkbrokerv1alpha1.SdkbrokerV1alpha1Interface {
-	return &fakesdkbrokerv1alpha1.FakeSdkbrokerV1alpha1{Fake: &c.Fake}
+// Mobile retrieves the MobileV1alpha1Client
+func (c *Clientset) Mobile() mobilev1alpha1.MobileV1alpha1Interface {
+	return &fakemobilev1alpha1.FakeMobileV1alpha1{Fake: &c.Fake}
 }

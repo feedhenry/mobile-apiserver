@@ -157,26 +157,22 @@ func NewConfig() *Config {
 	}
 }
 
-// NewContext is a convenience function that returns a new Context
-// object with non-nil maps
+// NewConfig is a convenience function that returns a new Config object with non-nil maps
 func NewContext() *Context {
 	return &Context{Extensions: make(map[string]runtime.Object)}
 }
 
-// NewCluster is a convenience function that returns a new Cluster
-// object with non-nil maps
+// NewConfig is a convenience function that returns a new Config object with non-nil maps
 func NewCluster() *Cluster {
 	return &Cluster{Extensions: make(map[string]runtime.Object)}
 }
 
-// NewAuthInfo is a convenience function that returns a new AuthInfo
-// object with non-nil maps
+// NewConfig is a convenience function that returns a new Config object with non-nil maps
 func NewAuthInfo() *AuthInfo {
 	return &AuthInfo{Extensions: make(map[string]runtime.Object)}
 }
 
-// NewPreferences is a convenience function that returns a new
-// Preferences object with non-nil maps
+// NewConfig is a convenience function that returns a new Config object with non-nil maps
 func NewPreferences() *Preferences {
 	return &Preferences{Extensions: make(map[string]runtime.Object)}
 }

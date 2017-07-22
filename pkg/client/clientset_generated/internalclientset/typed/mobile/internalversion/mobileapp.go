@@ -35,7 +35,6 @@ type MobileAppsGetter interface {
 type MobileAppInterface interface {
 	Create(*mobile.MobileApp) (*mobile.MobileApp, error)
 	Update(*mobile.MobileApp) (*mobile.MobileApp, error)
-	UpdateStatus(*mobile.MobileApp) (*mobile.MobileApp, error)
 	Delete(name string, options *v1.DeleteOptions) error
 	DeleteCollection(options *v1.DeleteOptions, listOptions v1.ListOptions) error
 	Get(name string, options v1.GetOptions) (*mobile.MobileApp, error)
@@ -78,22 +77,6 @@ func (c *mobileApps) Update(mobileApp *mobile.MobileApp) (result *mobile.MobileA
 		Namespace(c.ns).
 		Resource("mobileapps").
 		Name(mobileApp.Name).
-		Body(mobileApp).
-		Do().
-		Into(result)
-	return
-}
-
-// UpdateStatus was generated because the type contains a Status member.
-// Add a +genclientstatus=false comment above the type to avoid generating UpdateStatus().
-
-func (c *mobileApps) UpdateStatus(mobileApp *mobile.MobileApp) (result *mobile.MobileApp, err error) {
-	result = &mobile.MobileApp{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("mobileapps").
-		Name(mobileApp.Name).
-		SubResource("status").
 		Body(mobileApp).
 		Do().
 		Into(result)

@@ -209,7 +209,8 @@ func (pf *PortForwarder) listenOnPortAndAddress(port *ForwardedPort, protocol st
 func (pf *PortForwarder) getListener(protocol string, hostname string, port *ForwardedPort) (net.Listener, error) {
 	listener, err := net.Listen(protocol, fmt.Sprintf("%s:%d", hostname, port.Local))
 	if err != nil {
-		return nil, fmt.Errorf("Unable to create listener: Error %s", err)
+		runtime.HandleError(fmt.Errorf("Unable to create listener: Error %s", err))
+		return nil, err
 	}
 	listenerAddress := listener.Addr().String()
 	host, localPort, _ := net.SplitHostPort(listenerAddress)

@@ -21,7 +21,7 @@ package externalversions
 import (
 	clientset "github.com/feedhenry/mobile-apiserver/pkg/client/clientset_generated/clientset"
 	internalinterfaces "github.com/feedhenry/mobile-apiserver/pkg/client/informers_generated/externalversions/internalinterfaces"
-	sdkbroker "github.com/feedhenry/mobile-apiserver/pkg/client/informers_generated/externalversions/sdkbroker"
+	mobile "github.com/feedhenry/mobile-apiserver/pkg/client/informers_generated/externalversions/mobile"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	cache "k8s.io/client-go/tools/cache"
@@ -110,9 +110,9 @@ type SharedInformerFactory interface {
 	ForResource(resource schema.GroupVersionResource) (GenericInformer, error)
 	WaitForCacheSync(stopCh <-chan struct{}) map[reflect.Type]bool
 
-	Sdkbroker() sdkbroker.Interface
+	Mobile() mobile.Interface
 }
 
-func (f *sharedInformerFactory) Sdkbroker() sdkbroker.Interface {
-	return sdkbroker.New(f)
+func (f *sharedInformerFactory) Mobile() mobile.Interface {
+	return mobile.New(f)
 }

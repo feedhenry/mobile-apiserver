@@ -331,17 +331,17 @@ func (e *Store) shouldDeleteDuringUpdate(ctx genericapirequest.Context, key stri
 	if !e.EnableGarbageCollection {
 		return false
 	}
-	newMeta, err := meta.Accessor(obj)
+	newMeta, err := metav1.ObjectMetaFor(obj)
 	if err != nil {
 		utilruntime.HandleError(err)
 		return false
 	}
-	oldMeta, err := meta.Accessor(existing)
+	oldMeta, err := metav1.ObjectMetaFor(existing)
 	if err != nil {
 		utilruntime.HandleError(err)
 		return false
 	}
-	return len(newMeta.GetFinalizers()) == 0 && oldMeta.GetDeletionGracePeriodSeconds() != nil && *oldMeta.GetDeletionGracePeriodSeconds() == 0
+	return len(newMeta.Finalizers) == 0 && oldMeta.DeletionGracePeriodSeconds != nil && *oldMeta.DeletionGracePeriodSeconds == 0
 }
 
 // deleteForEmptyFinalizers handles deleting an object once its finalizer list
@@ -652,7 +652,7 @@ func shouldUpdateFinalizers(e *Store, accessor metav1.Object, options *metav1.De
 // DeletionTimestamp to "now". Finalizers are watching for such updates and will
 // finalize the object if their IDs are present in the object's Finalizers list.
 func markAsDeleting(obj runtime.Object) (err error) {
-	objectMeta, kerr := meta.Accessor(obj)
+	objectMeta, kerr := metav1.ObjectMetaFor(obj)
 	if kerr != nil {
 		return kerr
 	}
@@ -660,12 +660,12 @@ func markAsDeleting(obj runtime.Object) (err error) {
 	// This handles Generation bump for resources that don't support graceful
 	// deletion. For resources that support graceful deletion is handle in
 	// pkg/api/rest/delete.go
-	if objectMeta.GetDeletionTimestamp() == nil && objectMeta.GetGeneration() > 0 {
-		objectMeta.SetGeneration(objectMeta.GetGeneration() + 1)
+	if objectMeta.DeletionTimestamp == nil && objectMeta.Generation > 0 {
+		objectMeta.Generation++
 	}
-	objectMeta.SetDeletionTimestamp(&now)
+	objectMeta.DeletionTimestamp = &now
 	var zero int64 = 0
-	objectMeta.SetDeletionGracePeriodSeconds(&zero)
+	objectMeta.DeletionGracePeriodSeconds = &zero
 	return nil
 }
 
@@ -1193,16 +1193,6 @@ func (e *Store) CompleteWithOptions(options *generic.StoreOptions) error {
 	}
 
 	e.EnableGarbageCollection = opts.EnableGarbageCollection
-
-	if e.ObjectNameFunc == nil {
-		e.ObjectNameFunc = func(obj runtime.Object) (string, error) {
-			accessor, err := meta.Accessor(obj)
-			if err != nil {
-				return "", err
-			}
-			return accessor.GetName(), nil
-		}
-	}
 
 	if e.Storage == nil {
 		capacity := DefaultWatchCacheSize

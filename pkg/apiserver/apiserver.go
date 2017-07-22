@@ -17,6 +17,11 @@ limitations under the License.
 package apiserver
 
 import (
+	"github.com/feedhenry/mobile-apiserver/pkg/apis/mobile"
+	"github.com/feedhenry/mobile-apiserver/pkg/apis/mobile/install"
+	"github.com/feedhenry/mobile-apiserver/pkg/apis/mobile/v1alpha1"
+	mobilestorage "github.com/feedhenry/mobile-apiserver/pkg/registry/mobileapp"
+	"github.com/pkg/errors"
 	"k8s.io/apimachinery/pkg/apimachinery/announced"
 	"k8s.io/apimachinery/pkg/apimachinery/registered"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -26,11 +31,6 @@ import (
 	"k8s.io/apimachinery/pkg/version"
 	"k8s.io/apiserver/pkg/registry/rest"
 	genericapiserver "k8s.io/apiserver/pkg/server"
-
-	"github.com/feedhenry/mobile-apiserver/pkg/apis/mobile"
-	"github.com/feedhenry/mobile-apiserver/pkg/apis/mobile/install"
-	"github.com/feedhenry/mobile-apiserver/pkg/apis/mobile/v1alpha1"
-	mobilestorage "github.com/feedhenry/mobile-apiserver/pkg/registry/mobile/mobileapp"
 )
 
 var (
@@ -92,7 +92,7 @@ func (c *Config) SkipComplete() completedConfig {
 func (c completedConfig) New() (*MobileServer, error) {
 	genericServer, err := c.Config.GenericConfig.SkipComplete().New() // completion is done in Complete, no need for a second time
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "failed get GenericConfig")
 	}
 
 	s := &MobileServer{
@@ -102,11 +102,11 @@ func (c completedConfig) New() (*MobileServer, error) {
 	apiGroupInfo := genericapiserver.NewDefaultAPIGroupInfo(mobile.GroupName, registry, Scheme, metav1.ParameterCodec, Codecs)
 	apiGroupInfo.GroupMeta.GroupVersion = v1alpha1.SchemeGroupVersion
 	v1alpha1storage := map[string]rest.Storage{}
-	v1alpha1storage["flunders"] = mobilestorage.NewREST(Scheme, c.GenericConfig.RESTOptionsGetter)
-	apiGroupInfo.VersionedResourcesStorageMap["v1alpha1"] = v1alpha1storage
+	v1alpha1storage[mobile.MobileAppsResource] = mobilestorage.NewREST(Scheme, c.GenericConfig.RESTOptionsGetter)
+	apiGroupInfo.VersionedResourcesStorageMap[v1alpha1.APIGroupVersion] = v1alpha1storage
 
 	if err := s.GenericAPIServer.InstallAPIGroup(&apiGroupInfo); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "failed get InstallAPIGroup")
 	}
 
 	return s, nil

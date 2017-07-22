@@ -1,0 +1,77 @@
+{
+  "apiVersion": "v1",
+  "kind": "Pod",
+  "metadata": {
+    "labels": {
+      "app": "api",
+      "createdBy": "mobile-server"
+    },
+    "name": "apiserver",
+    "namespace": "mobile"
+  },
+  "spec": {
+    "containers": [
+      {
+        "args": [
+          "--authentication-skip-lookup",
+          "--authentication-kubeconfig=/etcd/apiserver-config/kubeconfig",
+          "--authorization-kubeconfig=/etcd/apiserver-config/kubeconfig",
+          "--client-ca-file=/etcd/apiserver-config/client-ca.crt",
+          #"--etcd-servers=https://10.13.137.230:4001",
+          #"--etcd-cafile=/etcd/apiserver-config/etcd-ca.crt",
+          #"--etcd-certfile=/etcd/apiserver-config/etcd-write.crt",
+          #"--etcd-keyfile=/etcd/apiserver-config/etcd-write.key",
+          "--tls-cert-file=/etcd/apiserver-config/serving.crt",
+          "--tls-private-key-file=/etcd/apiserver-config/serving.key",
+          "--v=5"
+        ],
+        "image": "feedhenry/mobile-apiserver",
+        "livenessProbe": {
+          "failureThreshold": 3,
+          "httpGet": {
+            "path": "/healthz",
+            "port": 443,
+            "scheme": "HTTPS"
+          },
+          "initialDelaySeconds": 5,
+          "periodSeconds": 5,
+          "successThreshold": 1,
+          "timeoutSeconds": 5
+        },
+        "name": "apiserver",
+        "ports": [
+          {
+            "containerPort": 443,
+            "protocol": "TCP"
+          }
+        ],
+        "readinessProbe": {
+          "failureThreshold": 3,
+          "httpGet": {
+            "path": "/healthz",
+            "port": 443,
+            "scheme": "HTTPS"
+          },
+          "periodSeconds": 5,
+          "successThreshold": 1,
+          "timeoutSeconds": 5
+        },
+        "volumeMounts": [
+          {
+            "mountPath": "/etcd/apiserver-config",
+            "name": "config-dir"
+          }
+        ]
+      }
+    ],
+    "hostNetwork": true,
+    "volumes": [
+      {
+        "hostPath": {
+          "path": "/Users/kelly/work/go/src/github.com/feedhenry/mobile-apiserver/config"
+        },
+        "name": "config-dir"
+      }
+    ]
+  }
+}

@@ -1,5 +1,3 @@
-// +build go1.8
-
 /*
 Copyright 2016 The Kubernetes Authors.
 
@@ -61,15 +59,6 @@ func TestCloneTLSConfig(t *testing.T) {
 		"serverInitOnce",
 		"mutex",
 		"sessionTicketKeys",
-
-		// go1.8
-		"DynamicRecordSizingDisabled",
-		"GetClientCertificate",
-		"GetConfigForClient",
-		"KeyLogWriter",
-		"Renegotiation",
-		"VerifyPeerCertificate",
-		"originalConfig",
 	)
 
 	// See #33936.

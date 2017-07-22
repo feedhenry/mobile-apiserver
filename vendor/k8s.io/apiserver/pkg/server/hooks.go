@@ -65,9 +65,6 @@ func (s *GenericAPIServer) AddPostStartHook(name string, hook PostStartHookFunc)
 	if hook == nil {
 		return nil
 	}
-	if s.disabledPostStartHooks.Has(name) {
-		return nil
-	}
 
 	s.postStartHookLock.Lock()
 	defer s.postStartHookLock.Unlock()

@@ -56,16 +56,6 @@ func (c *FakeMobileApps) Update(mobileApp *mobile.MobileApp) (result *mobile.Mob
 	return obj.(*mobile.MobileApp), err
 }
 
-func (c *FakeMobileApps) UpdateStatus(mobileApp *mobile.MobileApp) (*mobile.MobileApp, error) {
-	obj, err := c.Fake.
-		Invokes(testing.NewUpdateSubresourceAction(mobileappsResource, "status", c.ns, mobileApp), &mobile.MobileApp{})
-
-	if obj == nil {
-		return nil, err
-	}
-	return obj.(*mobile.MobileApp), err
-}
-
 func (c *FakeMobileApps) Delete(name string, options *v1.DeleteOptions) error {
 	_, err := c.Fake.
 		Invokes(testing.NewDeleteAction(mobileappsResource, c.ns, name), &mobile.MobileApp{})

@@ -107,7 +107,7 @@ func (s *EtcdOptions) AddFlags(fs *pflag.FlagSet) {
 }
 
 func (s *EtcdOptions) ApplyTo(c *server.Config) error {
-	c.RESTOptionsGetter = &SimpleRestOptionsFactory{Options: *s}
+	c.RESTOptionsGetter = &simpleRestOptionsFactory{Options: *s}
 	return nil
 }
 
@@ -116,11 +116,11 @@ func (s *EtcdOptions) ApplyWithStorageFactoryTo(factory serverstorage.StorageFac
 	return nil
 }
 
-type SimpleRestOptionsFactory struct {
+type simpleRestOptionsFactory struct {
 	Options EtcdOptions
 }
 
-func (f *SimpleRestOptionsFactory) GetRESTOptions(resource schema.GroupResource) (generic.RESTOptions, error) {
+func (f *simpleRestOptionsFactory) GetRESTOptions(resource schema.GroupResource) (generic.RESTOptions, error) {
 	ret := generic.RESTOptions{
 		StorageConfig:           &f.Options.StorageConfig,
 		Decorator:               generic.UndecoratedStorage,

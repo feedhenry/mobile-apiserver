@@ -1,7 +1,7 @@
-apiVersion: rbac.authorization.k8s.io/v1alpha1
+apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
-  name: wardle:system:auth-delegator
+  name: mobile:system:auth-delegator
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -10,4 +10,4 @@ subjects:
 - apiVersion: v1
   kind: ServiceAccount
   name: apiserver
-  namespace: wardle
+  namespace: mobile
