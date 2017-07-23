@@ -68,7 +68,7 @@ func NewMobileServerOptions() *MobileServerOptions {
 		AuthenticationOptions:   recommended.Authentication,
 		AuthorizationOptions:    recommended.Authorization,
 	}
-
+	fmt.Println("mobile options request headers", o.AuthenticationOptions.RequestHeader.UsernameHeaders)
 	return o
 }
 

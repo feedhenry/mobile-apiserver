@@ -28,5 +28,3 @@ items:
   subjects:
   - kind: SystemGroup
     name: system:authenticated
-  - kind: SystemGroup
-    name: system:unauthenticated    
