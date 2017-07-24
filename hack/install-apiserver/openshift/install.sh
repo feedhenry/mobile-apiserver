@@ -16,7 +16,7 @@ oc adm policy add-cluster-role-to-user system:auth-delegator -n ${targetNamespac
 oc create policybinding kube-system -n kube-system
 oc adm policy add-role-to-user extension-apiserver-authentication-reader -n kube-system --role-namespace=kube-system system:serviceaccount:${targetNamespace}:apiserver
 oc new-app -f hack/install-apiserver/openshift/deployment.json -n ${targetNamespace}
-oc create -f hack/install-apiserver/openshift/apiservice.json
+oc create -f hack/install-apiserver/apiservice.json
 # 2.  Installer creates `api` service with a fixed selector (app: api) with service serving cert annotation
 #oc -n ${targetNamespace} create service clusterip api --tcp=443:3101
 #oc -n ${targetNamespace} annotate svc/api service.alpha.openshift.io/serving-cert-secret-name=api-serving-cert

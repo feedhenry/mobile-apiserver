@@ -32,6 +32,7 @@ import (
 	"k8s.io/apiserver/pkg/storage/names"
 
 	mobileapi "github.com/feedhenry/mobile-apiserver/pkg/apis/mobile"
+	"github.com/golang/glog"
 )
 
 type apiServerStrategy struct {
@@ -55,8 +56,18 @@ func (apiServerStrategy) PrepareForUpdate(ctx genericapirequest.Context, obj, ol
 }
 
 func (apiServerStrategy) Validate(ctx genericapirequest.Context, obj runtime.Object) field.ErrorList {
-	return field.ErrorList{}
-	// return validation.ValidateServiceInstance(obj.(*mobileapi.ServiceInstance))
+	var errs = field.ErrorList{}
+	app, ok := obj.(*mobileapi.MobileApp)
+	if !ok {
+		glog.Fatal("received a non MobileApp object to create")
+	}
+	ns := genericapirequest.NamespaceValue(ctx)
+	fmt.Println("strategy Validate", ns)
+	validAppTypes := map[string]bool{"android": true, "ios": true}
+	if _, ok := validAppTypes[app.Spec.ClientType]; !ok {
+		errs = append(errs, field.Invalid(field.NewPath("Spec.ClientType"), app.Spec.ClientType, "invalid client type. valid types android or ios"))
+	}
+	return errs
 }
 
 func (apiServerStrategy) AllowCreateOnUpdate() bool {
