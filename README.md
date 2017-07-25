@@ -7,10 +7,10 @@ After cloning this repo take the following steps:
 
 *Note* improvements will be made to this over time. It is currently just a POC
 
-- Start your oc cluster with a host config and service catalog enabled. We enabled the service catalog so that Kubernetes and OpenShift are set up to recognise the ```apiregistration.k8s.io``` api.
+- Using v3.6.0-rc0 https://github.com/openshift/origin/releases/tag/v3.6.0-rc.0 . Start your oc cluster with a host config and service catalog enabled. We enabled the service catalog so that Kubernetes and OpenShift are set up to recognise the ```apiregistration.k8s.io``` api.
 
 ```
-oc cluster up --host-config-dir=${HOME}/openshift-config/openshift.local.config
+oc cluster up --service-catalog --host-config-dir=${HOME}/openshift-config/openshift.local.config
 ```
 - Login as system:admin
 
