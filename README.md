@@ -1,6 +1,6 @@
 ### Mobile Api Server
 
-The mobile api server is an extension to the Kubernetes api in order to represent mobile objects and apis.
+The mobile api server is an extension to the Kubernetes api in order to represent mobile objects and apis. Once it is deployed you will be able to do ```oc create -f MobileApp.json```
 
 ### Install locally on oc cluster up
 After cloning this repo take the following steps:
