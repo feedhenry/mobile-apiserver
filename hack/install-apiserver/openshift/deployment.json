@@ -144,7 +144,6 @@
                                     "--authentication-skip-lookup",
                                     "--tls-cert-file=/mnt/apiserver-config/serving.crt",
                                     "--tls-private-key-file=/mnt/apiserver-config/serving.key",
-                                    "--requestheader-client-ca-file=/mnt/apiserver-cert/front-proxy-ca.crt",
                                     "--v=10"
                                 ],
                                 "volumeMounts": [{
